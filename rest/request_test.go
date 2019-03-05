@@ -506,6 +506,14 @@ func TestURLTemplate(t *testing.T) {
 			ExpectedFullURL:  "/base/url/api/v1/namespaces/ns/r3/name1",
 			ExpectedFinalURL: "/base/url/api/v1/namespaces/%7Bnamespace%7D/r3/%7Bname%7D",
 		},
+		{
+			// dynamic client with version path
+			// /apis/$NAMEDGROUPNAME/$RESOURCEVERSION/namespaces/$NAMESPACE/$RESOURCE/%NAME/$SUBRESOURCE
+			Request: NewRequest(nil, "DELETE", uri, "", ContentConfig{GroupVersion: &schema.GroupVersion{Group: "test"}}, Serializers{}, nil, nil, 0).
+				Prefix("/version"),
+			ExpectedFullURL:  "http://localhost/some/base/url/path/version",
+			ExpectedFinalURL: "http://localhost/version",
+		},
 	}
 	for i, testCase := range testCases {
 		r := testCase.Request
